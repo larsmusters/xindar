@@ -1,0 +1,1 @@
+docker build --file=frontend.Dockerfile --rm=true -t registry.heroku.com/xindar/web .
