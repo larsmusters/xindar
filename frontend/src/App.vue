@@ -7,6 +7,9 @@
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
+  <v-btn> test !!</v-btn>
+  <v-btn icon="mdi-home" />
+  <v-icon icon="mdi-folder" />
   <HelloWorld msg="Vite + Vue" />
 </template>
 
