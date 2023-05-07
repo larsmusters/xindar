@@ -8,6 +8,7 @@
     </a>
   </div>
   <v-btn> test !!</v-btn>
+  {{ backendURL }}
   <v-btn icon="mdi-home" />
   <v-icon icon="mdi-folder" />
   <HelloWorld msg="Vite + Vue" />
@@ -15,6 +16,8 @@
 
 <script setup lang="ts">
 import HelloWorld from "./components/HelloWorld.vue";
+
+const backendURL = import.meta.env.VITE_API_URL;
 </script>
 
 <style scoped>
