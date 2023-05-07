@@ -3,7 +3,7 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB_NAME}
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
-    name: student
+    name: xindar
   jpa:
     hibernate:
       ddl-auto: create-drop

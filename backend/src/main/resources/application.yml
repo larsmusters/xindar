@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/student
+    url: jdbc:postgresql://localhost:5432/xindar
     username: postgres
     password: postgres
-    name: student
+    name: xindar
   jpa:
     hibernate:
       ddl-auto: create-drop
