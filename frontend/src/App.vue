@@ -31,6 +31,7 @@
         <v-divider />
         <v-list-item v-for="row in databaseOutput" :key="row.id">
           <v-row>
+            <v-col cols="1">{{ row.id }}</v-col>
             <v-col cols="3">
               {{ row.name }}
             </v-col>
@@ -40,6 +41,13 @@
             <v-col cols="1">
               {{ row.size }}
             </v-col>
+            <v-col cols="1">
+              <v-btn
+                variant="flat"
+                icon="mdi-delete-outline"
+                @click="deleteCharacter(row.id)"
+              />
+            </v-col>
           </v-row>
         </v-list-item>
       </v-list>
@@ -48,23 +56,29 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRaw } from "vue";
 import axios from "axios";
 
 interface Character {
-  id?: number;
+  id: number;
   name: string | null;
   health: number | null;
   size: number | null;
 }
 
-const newCharacter = ref<Character>({ name: null, health: null, size: null });
+const newCharacter = ref<Character>({
+  id: -1,
+  name: null,
+  health: null,
+  size: null,
+});
 
 const databaseOutput = ref<Character[] | null>(null);
 
 const makeCall = async () => {
   const config = { method: "GET", url: "character" };
   await axios(config).then((response) => {
+    console.log(response);
     databaseOutput.value = response.data as Character[];
     return response;
   });
@@ -80,13 +94,28 @@ const submitNewCharacter = async () => {
   await axios(config)
     .then((response) => {
       console.log(response);
-      databaseOutput.value?.push(newCharacter.value);
+      let newRow = toRaw({ ...newCharacter.value, id: response.data });
+      databaseOutput.value?.push(structuredClone(newRow));
     })
     .catch((response) => {
       console.log(response);
     });
 };
 
+const deleteCharacter = async (id: number) => {
+  const config = {
+    method: "DELETE",
+    url: "character/" + id,
+  };
+  await axios(config)
+    .then((response) => {
+      console.log(response);
+      databaseOutput.value = databaseOutput.value!.filter(
+        (row) => row.id != id
+      );
+    })
+    .catch((response) => console.log(response));
+};
 onMounted(() => {
   makeCall();
 });

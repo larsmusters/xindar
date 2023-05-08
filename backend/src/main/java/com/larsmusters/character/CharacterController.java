@@ -17,7 +17,12 @@ public class CharacterController {
     public List<Character> getCharacter() { return characterService.getCharacter();}
 
     @PostMapping
-    public void registerNewCharacter(@RequestBody Character character) {
-        characterService.addNewCharacter(character);
+    public Long registerNewCharacter(@RequestBody Character character) {
+        return characterService.addNewCharacter(character);
+    }
+
+    @DeleteMapping(path="{characterId}")
+    public void deleteCharacter(@PathVariable("characterId") Long characterId) {
+        characterService.deleteCharacter(characterId);
     }
 }

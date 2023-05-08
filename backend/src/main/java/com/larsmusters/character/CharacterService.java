@@ -14,16 +14,25 @@ public class CharacterService {
     @Autowired
     public CharacterService(CharacterRepository characterRepository) { this.characterRepository = characterRepository;}
 
-    public void addNewCharacter(Character character) {
+    public Long addNewCharacter(Character character) {
         Optional<Character> characterOptional = characterRepository
                 .findCharacterByName(character.getName());
         if (characterOptional.isPresent()) {
-            throw new IllegalStateException("email taken");
+            throw new IllegalStateException("Character name taken");
         }
         characterRepository.save(character);
+        return character.getId();
     }
 
     public List<Character> getCharacter() {
         return characterRepository.findAll();
+    }
+
+    public void deleteCharacter(Long characterId) {
+        boolean characterExists = characterRepository.existsById(characterId);
+        if (!characterExists) {
+            throw new IllegalStateException("Character with " + characterId + "does not exist");
+        }
+        characterRepository.deleteById(characterId);
     }
 }
