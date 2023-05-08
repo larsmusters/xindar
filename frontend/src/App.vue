@@ -12,6 +12,22 @@
             <v-col cols="1"> Size</v-col>
           </v-row>
         </v-list-item>
+        <v-list-item>
+          <v-row>
+            <v-col cols="3">
+              <v-text-field v-model="newCharacter.name"> </v-text-field
+            ></v-col>
+            <v-col cols="1">
+              <v-text-field v-model.number="newCharacter.health" />
+            </v-col>
+            <v-col cols="1">
+              <v-text-field v-model.number="newCharacter.size" />
+            </v-col>
+            <v-col cols="2">
+              <v-btn @click="submitNewCharacter"> Submit </v-btn></v-col
+            >
+          </v-row>
+        </v-list-item>
         <v-divider />
         <v-list-item v-for="row in databaseOutput" :key="row.id">
           <v-row>
@@ -36,11 +52,13 @@ import { onMounted, ref } from "vue";
 import axios from "axios";
 
 interface Character {
-  id: number;
-  name: string;
-  health: number;
-  size: number;
+  id?: number;
+  name: string | null;
+  health: number | null;
+  size: number | null;
 }
+
+const newCharacter = ref<Character>({ name: null, health: null, size: null });
 
 const databaseOutput = ref<Character[] | null>(null);
 
@@ -52,22 +70,24 @@ const makeCall = async () => {
   });
 };
 
+const submitNewCharacter = async () => {
+  const config = {
+    method: "POST",
+    url: "character",
+    headers: { "Content-type": "application/json" },
+    data: newCharacter.value,
+  };
+  await axios(config)
+    .then((response) => {
+      console.log(response);
+      databaseOutput.value?.push(newCharacter.value);
+    })
+    .catch((response) => {
+      console.log(response);
+    });
+};
+
 onMounted(() => {
   makeCall();
 });
 </script>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

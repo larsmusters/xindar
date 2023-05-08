@@ -1,9 +1,7 @@
 package com.larsmusters.character;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,4 +15,9 @@ public class CharacterController {
 
     @GetMapping
     public List<Character> getCharacter() { return characterService.getCharacter();}
+
+    @PostMapping
+    public void registerNewCharacter(@RequestBody Character character) {
+        characterService.addNewCharacter(character);
+    }
 }
