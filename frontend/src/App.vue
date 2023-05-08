@@ -29,7 +29,7 @@
           </v-row>
         </v-list-item>
         <v-divider />
-        <v-list-item v-for="row in databaseOutput" :key="row.id">
+        <v-list-item v-for="row in databaseOutput" :key="row.id!">
           <v-row>
             <v-col cols="1">{{ row.id }}</v-col>
             <v-col cols="3">
@@ -45,7 +45,7 @@
               <v-btn
                 variant="flat"
                 icon="mdi-delete-outline"
-                @click="deleteCharacter(row.id)"
+                @click="deleteCharacter(row.id!)"
               />
             </v-col>
           </v-row>
@@ -60,14 +60,14 @@ import { onMounted, ref, toRaw } from "vue";
 import axios from "axios";
 
 interface Character {
-  id: number;
+  id: number | null;
   name: string | null;
   health: number | null;
   size: number | null;
 }
 
 const newCharacter = ref<Character>({
-  id: -1,
+  id: null,
   name: null,
   health: null,
   size: null,
@@ -88,7 +88,9 @@ const submitNewCharacter = async () => {
   const config = {
     method: "POST",
     url: "character",
-    headers: { "Content-type": "application/json" },
+    headers: {
+      "Content-type": "application/json",
+    },
     data: newCharacter.value,
   };
   await axios(config)
