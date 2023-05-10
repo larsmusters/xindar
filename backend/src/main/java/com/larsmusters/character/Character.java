@@ -17,37 +17,34 @@ public class Character {
     )
     private Long id;
     private String name;
-    private int health;
-    private int size;
+    private int initiative;
+    private boolean isUp;
+    private Long battleId;
 
-    @Transient
-    private String sizeName;
+
+    public Character(Long id) {
+        this.id = id;
+    }
 
     // must put a default constructor
     public Character() {
-
     }
 
-    public Character(Long id) {
-    }
-
-    public Character(Long id,
-                     String name,
-                     int health,
-                     int size) {
+    public Character(Long id, String name, int initiative, boolean isUp, Long battleId) {
         this.id = id;
         this.name = name;
-        this.health = health;
-        this.size = size;
+        this.initiative = initiative;
+        this.isUp = isUp;
+        this.battleId = battleId;
     }
 
-    public Character(String name,
-                     int health,
-                     int size) {
+    public Character(String name, int initiative, boolean isUp, Long battleId) {
         this.name = name;
-        this.health = health;
-        this.size = size;
+        this.initiative = initiative;
+        this.isUp = isUp;
+        this.battleId = battleId;
     }
+
 
     public Long getId() {
         return id;
@@ -65,21 +62,27 @@ public class Character {
         this.name = name;
     }
 
-    public int getHealth() { return health; }
+    public int getInitiative() {
+        return initiative;
+    }
 
-    public void setHealth(int health) { this.health = health; }
+    public void setInitiative(int initiative) {
+        this.initiative = initiative;
+    }
 
-    public int getSize() { return size; }
+    public boolean isUp() {
+        return isUp;
+    }
 
-    public void setSize(int size) { this.size = size; }
+    public void setUp(boolean up) {
+        isUp = up;
+    }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", health='" + health + '\'' +
-                ", size=" + size +
-                '}';
+    public Long getBattleId() {
+        return battleId;
+    }
+
+    public void setBattleId(Long battleId) {
+        this.battleId = battleId;
     }
 }

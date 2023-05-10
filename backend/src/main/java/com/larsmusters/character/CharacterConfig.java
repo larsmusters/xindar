@@ -17,15 +17,17 @@ public class CharacterConfig {
         return args -> {
             Character zombie = new Character(
                     "Zombie",
-                    123,
-                    3
+                    20,
+                    true,
+                    1L
 
             );
 
             Character vampire = new Character(
                     "Vampire",
-                    567,
-                    2
+                    10,
+                    false,
+                    1L
             );
 
             repository.saveAll(List.of(zombie,vampire));
