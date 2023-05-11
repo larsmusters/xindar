@@ -1,32 +1,23 @@
-# We don't want to start from scratch.
-# That is why we tell node here to use the current node image as base.
-FROM node:alpine3.11
-
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# Create an application directory
-RUN mkdir -p /app
-
-# The /app directory should act as the main application directory
+# build stage
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-
-# Copy the app package and package-lock.json file
 COPY package*.json ./
-
-# Install node packages
 RUN npm install
-
-# Copy or project directory (locally) in the current directory of our docker image (/app)
+# Copy our project directory (locally) in the current directory of our docker image (/app)
 COPY . .
-
-# Build the app
 RUN npm run build
 
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+COPY ./nginx/nginx.conf.template /etc/nginx/templates/default.conf.template
+
 # Expose $PORT on container.
-# We use a varibale here as the port is something that can differ on the environment.
+# We use a variable here as the port is something that can differ on the environment.
+# By default, the nginx image listens to port 80. This should be set to the heroku defined port.
+ENV LISTEN_PORT $PORT
 EXPOSE $PORT
 
 # Start the app
-#CMD [ "npm", "run", "dev"]
-CMD [ "http-server", "dist"]
+CMD [ "nginx", "-g", "daemon off;"]
