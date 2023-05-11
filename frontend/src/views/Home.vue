@@ -68,18 +68,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, toRaw } from "vue";
+import { computed, ref, toRaw } from "vue";
 import axios from "axios";
+import { useAppStore } from "@/store";
+import { Character } from "@/types";
+
+const store = useAppStore();
 
 const showAdded = false;
-
-interface Character {
-  id: number | null;
-  name: string | null;
-  initiative: number | null;
-  isUp: number | null;
-  battleId: number | null;
-}
 
 const newCharacter = ref<Character>({
   id: null,
@@ -89,22 +85,9 @@ const newCharacter = ref<Character>({
   battleId: null,
 });
 
-const databaseOutput = ref<Character[] | null>(null);
-
 const sortedCharacters = computed(() => {
-  return databaseOutput.value?.sort(
-    (a, b) => (b.initiative || 0) - (a.initiative || 0)
-  );
+  return store.data?.sort((a, b) => (b.initiative || 0) - (a.initiative || 0));
 });
-
-const makeCall = async () => {
-  const config = { method: "GET", url: "character" };
-  await axios(config).then((response) => {
-    console.log(response);
-    databaseOutput.value = response.data as Character[];
-    return response;
-  });
-};
 
 const submitNewCharacter = async () => {
   const config = {
@@ -119,7 +102,7 @@ const submitNewCharacter = async () => {
     .then((response) => {
       console.log(response);
       let newRow = toRaw({ ...newCharacter.value, id: response.data });
-      databaseOutput.value?.push(structuredClone(newRow));
+      store.data?.push(structuredClone(newRow));
     })
     .catch((response) => {
       console.log(response);
@@ -134,15 +117,10 @@ const deleteCharacter = async (id: number) => {
   await axios(config)
     .then((response) => {
       console.log(response);
-      databaseOutput.value = databaseOutput.value!.filter(
-        (row) => row.id != id
-      );
+      store.data = store.data!.filter((row) => row.id != id);
     })
     .catch((response) => console.log(response));
 };
-onMounted(() => {
-  makeCall();
-});
 </script>
 
 <style scoped>
