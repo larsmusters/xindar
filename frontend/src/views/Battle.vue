@@ -2,7 +2,13 @@
   <v-container fluid style="min-height: 100%">
     <v-row>
       <v-col class="px-0 pt-0">
-        <v-btn block rounded="0" color="green" flat @click="goToNextTurn()">
+        <v-btn
+          block
+          rounded="0"
+          color="green"
+          flat
+          @click="goToNextTurn()"
+        >
           Volgende huts!
         </v-btn>
       </v-col>
@@ -11,7 +17,9 @@
       <v-col cols="12" md="8">
         <v-row>
           <v-col align="center">
-            <h1 style="font-size: 5em">{{ store.currentCharacter?.name }}</h1>
+            <h1 style="font-size: 5em">
+              {{ store.currentCharacter?.name }}
+            </h1>
             <h1 style="font-size: 5em">
               {{ store.currentCharacter?.initiative }}
             </h1>
@@ -20,9 +28,9 @@
         <v-row>
           <v-col align="center">
             <h2>Up next</h2>
-            <h1>{{ store.upNextCharacter?.name }}</h1></v-col
-          ></v-row
-        >
+            <h1>{{ store.upNextCharacter?.name }}</h1>
+          </v-col>
+        </v-row>
       </v-col>
       <v-divider vertical />
       <v-col cols="12" md="4">
@@ -51,17 +59,17 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from "@/store";
-const store = useAppStore();
-import { onMounted } from "vue";
+import { useAppStore } from '@/store'
+const store = useAppStore()
+import { onMounted } from 'vue'
 
 onMounted(() => {
-  store.battleData = store.sortedCharacters;
-});
+  store.battleData = store.sortedCharacters
+})
 
 const goToNextTurn = () => {
   if (store.stompClient) {
-    store.stompClient.send("/ws/next");
+    store.stompClient.send('/ws/next')
   }
-};
+}
 </script>

@@ -7,21 +7,20 @@
           <v-row class="mt-1 mb-1">
             <v-col cols="8" sm="6">
               <v-text-field
+                v-model="newCharacter.name"
                 variant="outlined"
                 label="Name"
                 persistent-placeholder
-                v-model="newCharacter.name"
                 hide-details
-              >
-              </v-text-field
-            ></v-col>
+              />
+            </v-col>
             <v-col cols="4">
               <v-text-field
+                v-model.number="newCharacter.initiative"
                 variant="outlined"
                 label="Initiative"
                 persistent-placeholder
                 hide-details
-                v-model.number="newCharacter.initiative"
                 :rules="[(v) => !isNaN(v) || '']"
               />
             </v-col>
@@ -40,7 +39,7 @@
         <v-list-item>
           <v-row>
             <v-col cols="4"> Name </v-col>
-            <v-col cols="4" md="3"> Initiative</v-col>
+            <v-col cols="4" md="3"> Initiative </v-col>
           </v-row>
         </v-list-item>
         <v-list-item v-for="row in sortedCharacters" :key="row.id!">
