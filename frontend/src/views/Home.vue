@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-card elevation="4">
+  <v-container style="max-width: 40em">
+    <v-card elevation="1">
       <v-card-title> Fill in your character(s):</v-card-title>
       <v-list style="max-width: 40em">
         <v-list-item>

@@ -13,11 +13,14 @@
     "@mdi/font": "^7.2.96",
     "axios": "^1.4.0",
     "pinia": "^2.0.36",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
-    "vuetify": "^3.2.2"
+    "vuetify": "^3.2.2",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
+    "@types/sockjs-client": "^1.5.1",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
     "@vitejs/plugin-vue": "^4.1.0",

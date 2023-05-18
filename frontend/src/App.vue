@@ -3,8 +3,20 @@
     <v-app-bar color="white" flat border>
       <v-app-bar-title style="font-size: 2em"> Xindar </v-app-bar-title>
       <v-app-bar-nav-icon :icon="showIcon" @click="startBattle" />
+      <v-app-bar-nav-icon
+        style="pointer-events: none"
+        v-if="store.socketConnected"
+        icon="mdi-access-point-check"
+        color="green"
+      />
+      <v-app-bar-nav-icon
+        style="pointer-events: none"
+        v-else
+        icon="mdi-access-point-remove"
+        color="red"
+      />
     </v-app-bar>
-    <v-main style="max-width: 40em">
+    <v-main>
       <router-view />
     </v-main>
   </v-app>
@@ -16,6 +28,8 @@ import { computed, onMounted } from "vue";
 import axios from "axios";
 import { Character } from "@/types";
 import { useAppStore } from "@/store";
+import SockJS from "sockjs-client/dist/sockjs";
+import Stomp from "webstomp-client";
 
 const store = useAppStore();
 
@@ -37,12 +51,33 @@ const showIcon = computed(() =>
 const getCharacters = async () => {
   const config = { method: "GET", url: "character" };
   await axios(config).then((response) => {
-    console.log(response);
     store.data = response.data as Character[];
   });
 };
 
+const connectToWebSocket = async () => {
+  const url = import.meta.env.VITE_API_URL + "/websocket";
+  const socket = new SockJS(url);
+  store.stompClient = Stomp.over(socket);
+  store.stompClient.connect({}, function (frame) {
+    console.log("Connected: " + frame);
+    store.stompClient?.subscribe("/topic/greetings", (greeting) => {
+      console.log(JSON.parse(greeting.body).content);
+    });
+    store.stompClient?.subscribe("/topic/next", (greeting) => {
+      store.goToNextTurn();
+    });
+  });
+};
+
+const disconnect = () => {
+  if (store.stompClient) {
+    store.stompClient.disconnect();
+  }
+};
+
 onMounted(() => {
   getCharacters();
+  connectToWebSocket();
 });
 </script>
