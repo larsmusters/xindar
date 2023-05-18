@@ -1,9 +1,14 @@
 package com.larsmusters.character;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.larsmusters.battle.Battle;
 import jakarta.persistence.*;
 
-@Entity
-@Table
+@Entity(name = "Character")
+@Table(name = "character")
 public class Character {
     @Id
     @SequenceGenerator(
@@ -15,11 +20,41 @@ public class Character {
             strategy = GenerationType.SEQUENCE,
             generator = "character_sequence"
     )
+    @Column(
+            name="id",
+            updatable = false
+    )
     private Long id;
+
+    @Column(
+            name="name",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
     private String name;
+
+    @Column(
+            name="initiative"
+    )
     private int initiative;
+
+    @Column(
+            name="is_up"
+    )
     private boolean isUp;
-    private Long battleId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name="battle_id",
+            foreignKey = @ForeignKey(name="fk_character_battle")
+    )
+//    @JsonIgnoreProperties(value = "character")
+    @JsonBackReference
+//    @JsonIdentityInfo(
+//            generator = ObjectIdGenerators.PropertyGenerator.class,
+//            property = "id"
+//    )
+    private Battle battle;
 
 
     public Character(Long id) {
@@ -30,19 +65,19 @@ public class Character {
     public Character() {
     }
 
-    public Character(Long id, String name, int initiative, boolean isUp, Long battleId) {
+    public Character(Long id, String name, int initiative, boolean isUp, Battle battle) {
         this.id = id;
         this.name = name;
         this.initiative = initiative;
         this.isUp = isUp;
-        this.battleId = battleId;
+        this.battle = battle;
     }
 
-    public Character(String name, int initiative, boolean isUp, Long battleId) {
+    public Character(String name, int initiative, boolean isUp, Battle battle) {
         this.name = name;
         this.initiative = initiative;
         this.isUp = isUp;
-        this.battleId = battleId;
+        this.battle = battle;
     }
 
 
@@ -78,11 +113,11 @@ public class Character {
         isUp = up;
     }
 
-    public Long getBattleId() {
-        return battleId;
+    public Battle getBattle() {
+        return battle;
     }
 
-    public void setBattleId(Long battleId) {
-        this.battleId = battleId;
+    public void setBattle(Battle battle) {
+        this.battle = battle;
     }
 }
