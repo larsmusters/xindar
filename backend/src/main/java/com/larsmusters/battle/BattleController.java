@@ -1,9 +1,8 @@
 package com.larsmusters.battle;
 
+import com.larsmusters.character.Character;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,4 +15,16 @@ public class BattleController {
 
     @GetMapping
     public List<Battle> getBattle() { return battleService.getBattle();}
+
+
+    @PostMapping
+    public Long addBattle(@RequestBody Battle battle) {
+        return battleService.addBattle(battle);
+    }
+
+    @DeleteMapping(path="{battleId}")
+    public void deleteBattle(@PathVariable("battleId") Long battleId) {
+        battleService.deleteBattle(battleId);
+    }
+
 }

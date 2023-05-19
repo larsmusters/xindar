@@ -32,28 +32,20 @@ public class Battle {
     )
     private String name;
 
-    @OneToMany(mappedBy = "battle", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JsonIgnoreProperties(value = "battle")
+    @OneToMany(mappedBy = "battle", cascade = CascadeType.ALL)
     @JsonManagedReference
-//    @JsonIgnore
-//    @JsonIdentityInfo(
-//            generator = ObjectIdGenerators.PropertyGenerator.class,
-//            property = "id"
-//    )
     private List<Character> characters;
 
 
     public Battle() {
-
     }
 
     public Battle(Long id) {
         this.id = id;
     }
 
-    public Battle(String name, List<Character> characters) {
+    public Battle(String name) {
         this.name = name;
-        this.characters = characters;
     }
 
     public Battle(Long id, String name, List<Character> characters) {
@@ -84,5 +76,13 @@ public class Battle {
 
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
+    }
+
+    @Override
+    public String toString() {
+        return "Battle{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

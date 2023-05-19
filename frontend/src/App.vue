@@ -23,6 +23,7 @@
       />
     </v-app-bar>
     <v-main>
+      {{ store.battles }}
       <router-view />
     </v-main>
   </v-app>
@@ -32,7 +33,7 @@
 import { useRoute, useRouter } from 'vue-router'
 import { computed, onMounted } from 'vue'
 import axios from 'axios'
-import { Character } from '@/types'
+import { BattleWithCharacters, Character } from '@/types'
 import { useAppStore } from '@/store'
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp from 'webstomp-client'
@@ -61,6 +62,14 @@ const getCharacters = async () => {
   })
 }
 
+const getBattles = async () => {
+  const config = { method: 'GET', url: 'battle' }
+  await axios(config).then((response) => {
+    store.battles = response.data as BattleWithCharacters[]
+  })
+}
+
+
 const connectToWebSocket = async () => {
   const url = import.meta.env.VITE_API_URL + '/websocket'
   const socket = new SockJS(url)
@@ -79,5 +88,6 @@ const connectToWebSocket = async () => {
 onMounted(() => {
   getCharacters()
   connectToWebSocket()
+  getBattles()
 })
 </script>

@@ -13,4 +13,17 @@ public class BattleService {
     @Autowired BattleService(BattleRepository battleRepository) { this.battleRepository = battleRepository;}
 
     public List<Battle> getBattle() { return battleRepository.findAll();}
+
+    public Long addBattle(Battle battle) {
+        battleRepository.save(battle);
+        return battle.getId();
+    }
+
+    public void deleteBattle(Long battleId) {
+        boolean battleExists = battleRepository.existsById(battleId);
+        if (!battleExists) {
+            throw new IllegalStateException("Battle with " + battleId + " does not exist.");
+        }
+        battleRepository.deleteById(battleId);
+    }
 }

@@ -1,9 +1,6 @@
 package com.larsmusters.character;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import com.larsmusters.battle.Battle;
 import jakarta.persistence.*;
 
@@ -43,17 +40,12 @@ public class Character {
     )
     private boolean isUp;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(
             name="battle_id",
             foreignKey = @ForeignKey(name="fk_character_battle")
     )
-//    @JsonIgnoreProperties(value = "character")
     @JsonBackReference
-//    @JsonIdentityInfo(
-//            generator = ObjectIdGenerators.PropertyGenerator.class,
-//            property = "id"
-//    )
     private Battle battle;
 
 
@@ -119,5 +111,15 @@ public class Character {
 
     public void setBattle(Battle battle) {
         this.battle = battle;
+    }
+
+    @Override
+    public String toString() {
+        return "Character{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", initiative=" + initiative +
+                ", isUp=" + isUp +
+                '}';
     }
 }
