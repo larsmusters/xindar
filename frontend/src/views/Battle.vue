@@ -63,10 +63,14 @@ import { useAppStore } from '@/store'
 const store = useAppStore()
 import { onMounted } from 'vue'
 
+const getBattles = () => {
+  store.battleService?.get.all().then((response) => store.battles = response)
+}
+getBattles()
+
 onMounted(() => {
   store.battleData = store.sortedCharacters
 })
-
 const goToNextTurn = () => {
   if (store.stompClient) {
     store.stompClient.send('/ws/next')

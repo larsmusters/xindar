@@ -2,10 +2,11 @@
   <v-app-bar flat>
     <v-container class="fill-height d-flex align-center">
       <v-avatar
-        class="me-10 ms-4"
+        class="me-10 ms-4 v-card--hover"
         size="32"
         rounded="0"
         image="head-icon.svg"
+        @click="toHome"
       />
 
       <div v-if="!xs">
@@ -47,15 +48,15 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '@/store/index.ts'
 import { useDisplay } from 'vuetify'
-import { ref } from 'vue'
-
-const store = useAppStore()
-
-const dialog = ref<boolean>()
-
+import { useRouter } from 'vue-router'
 const { xs } = useDisplay()
 
 const links = [{ label: 'Battles', routeName: 'Setup' }, { label: 'Join a battle', routeName: 'Battle' }]
+
+const router = useRouter()
+
+const toHome = () => {
+  router.push({ name: 'Home' })
+}
 </script>

@@ -114,19 +114,21 @@
 
 <script setup lang="ts">
 import { computed, ref, toRaw } from 'vue'
-import axios from 'axios'
 import { useAppStore } from '@/store'
-import { Character } from '@/types'
+import { CreateCharacter } from '@/character/character-types.ts'
 
 const store = useAppStore()
 
+const getCharacter = () => {
+  store.characterService?.get.all().then((response) => store.data = response )
+}
+getCharacter()
+
 const showAdded = false
 
-const newCharacter = ref<Character>({
-  id: null,
-  name: null,
+const newCharacter = ref<CreateCharacter>({
+  name: '',
   initiative: null,
-  isUp: null,
   battleId: null,
 })
 
@@ -135,18 +137,8 @@ const sortedCharacters = computed(() => {
 })
 
 const submitNewCharacter = async () => {
-  const config = {
-    method: 'POST',
-    url: 'character',
-    headers: {
-      'Content-type': 'application/json',
-    },
-    data: newCharacter.value,
-  }
-  await axios(config)
-    .then((response) => {
-      console.log(response)
-      let newRow = toRaw({ ...newCharacter.value, id: response.data })
+  await store.characterService?.create.one(newCharacter.value).then((response) => {
+      let newRow = toRaw(response)
       store.data?.push(structuredClone(newRow))
     })
     .catch((response) => {
@@ -155,12 +147,7 @@ const submitNewCharacter = async () => {
 }
 
 const deleteCharacter = async (id: number) => {
-  const config = {
-    method: 'DELETE',
-    url: 'character/' + id,
-  }
-  await axios(config)
-    .then((response) => {
+  await store.characterService?.delete.one(id).then((response) => {
       console.log(response)
       store.data = store.data!.filter((row) => row.id != id)
     })

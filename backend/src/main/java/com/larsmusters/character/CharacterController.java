@@ -17,7 +17,7 @@ public class CharacterController {
     public List<Character> getCharacter() { return characterService.getCharacter();}
 
     @PostMapping
-    public Long registerNewCharacter(@RequestBody Character character) {
+    public Character registerNewCharacter(@RequestBody Character character) {
         return characterService.addNewCharacter(character);
     }
 

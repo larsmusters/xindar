@@ -1,9 +1,14 @@
 import { defineStore } from 'pinia'
-import { Character, BattleWithCharacters } from '@/types'
+import { Character } from '@/character/character-types.ts'
 import { Client } from 'webstomp-client'
+import { CharacterService } from '@/character/character-service.ts'
+import { BattleService } from '@/battle/battle-service.ts'
+import { BattleWithCharacters } from '@/battle/battle-types.ts'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
+    characterService: null as CharacterService | null,
+    battleService: null as BattleService | null,
     stompClient: null as Client | null,
     data: [] as Character[],
     battleData: [] as Character[],

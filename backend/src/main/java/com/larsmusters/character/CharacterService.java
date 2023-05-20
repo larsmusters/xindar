@@ -13,14 +13,14 @@ public class CharacterService {
     @Autowired
     public CharacterService(CharacterRepository characterRepository) { this.characterRepository = characterRepository;}
 
-    public Long addNewCharacter(Character character) {
+    public Character addNewCharacter(Character character) {
 //        Optional<Character> characterOptional = characterRepository
 //                .findCharacterByName(character.getName());
 //        if (characterOptional.isPresent()) {
 //            throw new IllegalStateException("Character name taken");
 //        }
         characterRepository.save(character);
-        return character.getId();
+        return character;
     }
 
     public List<Character> getCharacter() {
