@@ -1,42 +1,23 @@
 <template>
   <v-app>
-    <v-app-bar
-      color="white"
-      flat
-      border
-    >
-      <v-app-bar-title style="font-size: 2em">
-        Xindar
-      </v-app-bar-title>
-      <v-app-bar-nav-icon :icon="showIcon" @click="startBattle" />
-      <v-app-bar-nav-icon
-        v-if="store.socketConnected"
-        style="pointer-events: none"
-        icon="mdi-access-point-check"
-        color="green"
-      />
-      <v-app-bar-nav-icon
-        v-else
-        style="pointer-events: none"
-        icon="mdi-access-point-remove"
-        color="red"
-      />
-    </v-app-bar>
-    <v-main>
-      {{ store.battles }}
+    <AppBar />
+    <v-main class="bg-grey-lighten-3">
       <router-view />
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
+import { useAppStore } from '@/store'
 import { useRoute, useRouter } from 'vue-router'
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { BattleWithCharacters, Character } from '@/types'
-import { useAppStore } from '@/store'
 import SockJS from 'sockjs-client/dist/sockjs'
 import Stomp from 'webstomp-client'
+import AppBar from '@/components/layout/AppBar.vue'
+
+const drawer = ref()
 
 const store = useAppStore()
 
