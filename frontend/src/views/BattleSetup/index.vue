@@ -6,9 +6,11 @@
         <v-sheet min-height="70vh" rounded="lg">
           <BattleSelect
             v-model:title="battleName"
+            :battles="store.battles"
             @remove-battle="removeBattle"
             @add-battle="addBattle"
             @init:new-battle="handleNewBattle"
+            @select:battle="changeBattle"
           />
           <v-list style="max-width: 40em">
             <v-list-item>
@@ -115,6 +117,10 @@ const removeBattle = () => {
 }
 const handleNewBattle = () => {
   console.log('new battle is being made, remove current data')
+}
+
+const changeBattle = (battle ) => {
+  console.log('Battle changed to '+ battle)
 }
 const showAdded = false
 

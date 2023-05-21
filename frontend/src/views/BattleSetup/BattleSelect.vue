@@ -1,38 +1,59 @@
 <template>
-  <div class=" pa-3 px-6 d-flex justify-lg-space-between">
-    <div v-if="editMode == 'off'" class="d-flex">
-      <h1 class="pr-3">
-        {{ displayTitle }}
-      </h1>
-      <v-btn
-        icon="mdi-pencil"
-        variant="text"
-        class="rounded-lg"
-        @click="editBattleName"
-      />
-    </div>
-    <div v-else class="d-flex align-center">
-      <v-text-field
-        v-model="editModeTitle"
-        class="pr-3"
-        variant="outlined"
-        style="min-width: 15em"
-        hide-details
-        density="comfortable"
-        placeholder="Your battle name"
-      />
-      <v-btn
-        icon="mdi-content-save"
-        variant="text"
-        class="rounded-lg"
-        @click="handleSaveButton"
-      />
-      <v-btn
-        icon="mdi-cancel"
-        variant="text"
-        class="rounded-lg ml-1"
-        @click="editMode = 'off'"
-      />
+  <div class=" pa-3 px-3 d-flex justify-lg-space-between">
+    <div>
+      <div v-if="editMode == 'off'" class="d-flex align-center">
+        <v-btn
+          icon
+          variant="text"
+          class="mr-3"
+        >
+          <v-icon icon="mdi-dots-horizontal" />
+          <v-menu activator="parent">
+            <battle-menu-selector :battles="battles" @select="(e) => $emit('select:battle', e)" />
+          </v-menu>
+        </v-btn>
+        <h1 class="pr-2">
+          {{ displayTitle }}
+        </h1>
+        <v-btn
+          variant="text"
+          class="rounded-lg"
+          icon="mdi-pencil"
+          @click="editBattleName"
+        />
+      </div>
+
+      <div v-else class="d-flex align-center">
+        <v-text-field
+          v-model="editModeTitle"
+          class="pr-3 ml-3"
+          variant="outlined"
+          style="min-width: 15em"
+          hide-details
+          density="comfortable"
+          placeholder="Your battle name"
+          @keyup.enter="handleSaveButton"
+        />
+        <v-btn
+          variant="text"
+          class="rounded-lg"
+          @click="handleSaveButton"
+        >
+          Save
+          <v-icon
+            icon="mdi-content-save"
+            class="pl-2"
+          />
+        </v-btn>
+        <v-btn
+          variant="text"
+          class="rounded-lg ml-1"
+          @click="editMode = 'off'"
+        >
+          Cancel
+          <v-icon icon="mdi-cancel" class="pl-2" />
+        </v-btn>
+      </div>
     </div>
 
     <div class="d-flex align-center">
@@ -84,6 +105,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
+import BattleMenuSelector from '@/views/BattleSetup/BattleMenuSelector.vue'
+import Battle from '@/views/Battle.vue'
 
 const { xs } = useDisplay()
 
@@ -91,6 +114,7 @@ const dialog = ref<boolean>()
 
 const props = defineProps<{
   title: string;
+  battles: Battle[];
 }>()
 
 const emits = defineEmits<{
@@ -98,6 +122,7 @@ const emits = defineEmits<{
   (e: 'remove-battle'): void;
   (e: 'add-battle', battleName: string): void;
   (e: 'init:new-battle'): void
+  (e: 'select:battle', battle: Battle): void
 }>()
 
 const editMode = ref<'off' | 'editing' | 'adding'>('off')
