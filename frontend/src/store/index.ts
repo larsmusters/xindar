@@ -3,10 +3,11 @@ import { Character } from '@/character/character-types.ts'
 import { Client } from 'webstomp-client'
 import { CharacterService } from '@/character/character-service.ts'
 import { BattleService } from '@/battle/battle-service.ts'
-import { BattleWithCharacters } from '@/battle/battle-types.ts'
+import { Battle, BattleWithCharacters } from '@/battle/battle-types.ts'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
+    selectedBattle: null as Battle | null,
     characterService: null as CharacterService | null,
     battleService: null as BattleService | null,
     stompClient: null as Client | null,

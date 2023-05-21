@@ -5,7 +5,7 @@
     <v-card-item
       v-for="battle in battles"
       :key="battle.id"
-      class="v-card--hover pa-3 px-5"
+      class="battle-card-item pa-3 px-5"
       @click="$emit('select', battle)"
     >
       {{ battle.name }}
@@ -24,3 +24,12 @@ defineEmits<{
   (e: 'select', battle: Battle): void;
 }>()
 </script>
+
+<style lang="scss">
+.battle-card-item {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+  }
+}
+</style>

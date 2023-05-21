@@ -1,21 +1,22 @@
 <template>
   <div class=" pa-3 px-3 d-flex justify-lg-space-between">
     <div>
-      <div v-if="editMode == 'off'" class="d-flex align-center">
+      <div v-if="editMode == 'off' && battles.length != 0" class="d-flex align-center">
         <v-btn
+          v-if="battles.length != 0"
           icon
           variant="text"
-          class="mr-3"
         >
           <v-icon icon="mdi-dots-horizontal" />
           <v-menu activator="parent">
             <battle-menu-selector :battles="battles" @select="(e) => $emit('select:battle', e)" />
           </v-menu>
         </v-btn>
-        <h1 class="pr-2">
-          {{ displayTitle }}
+        <h1 :class="!!title? '' : 'text-grey'" class="pr-2 ml-3">
+          {{ title || 'Select a battle' }}
         </h1>
         <v-btn
+          v-if="!!title"
           variant="text"
           class="rounded-lg"
           icon="mdi-pencil"
@@ -23,7 +24,7 @@
         />
       </div>
 
-      <div v-else class="d-flex align-center">
+      <div v-else-if="editMode != 'off'" class="d-flex align-center">
         <v-text-field
           v-model="editModeTitle"
           class="pr-3 ml-3"
@@ -58,6 +59,7 @@
 
     <div class="d-flex align-center">
       <v-btn
+        v-if="!!title"
         variant="text"
         class="d-flex flex-column"
       >
@@ -87,14 +89,18 @@
               <v-btn @click="dialog=false">
                 Cancel
               </v-btn>
-              <v-btn @click=";[emits('remove-battle'), dialog=false]">
+              <v-btn @click=";[emits('remove:battle'), dialog=false]">
                 Remove
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-btn>
-      <v-divider vertical class="mx-2" />
+      <v-divider
+        v-if="title"
+        vertical
+        class="mx-2"
+      />
       <v-btn variant="text" @click="initNewBattle">
         new battle
       </v-btn>
@@ -113,14 +119,14 @@ const { xs } = useDisplay()
 const dialog = ref<boolean>()
 
 const props = defineProps<{
-  title: string;
+  title: string | null;
   battles: Battle[];
 }>()
 
 const emits = defineEmits<{
   (e: 'update:title', title: string): void;
-  (e: 'remove-battle'): void;
-  (e: 'add-battle', battleName: string): void;
+  (e: 'remove:battle'): void;
+  (e: 'add:battle', battleName: string): void;
   (e: 'init:new-battle'): void
   (e: 'select:battle', battle: Battle): void
 }>()
@@ -130,7 +136,7 @@ const editModeTitle = ref<string>('')
 
 const editBattleName = () => {
   editMode.value = 'editing'
-  editModeTitle.value = props.title
+  editModeTitle.value = props.title || ''
 }
 
 const initNewBattle = () => {
@@ -146,13 +152,10 @@ const handleSaveButton = () => {
   if (editMode.value == 'editing'){
     emits('update:title', editModeTitle.value)
   } else if (editMode.value == 'adding') {
-    emits('add-battle', editModeTitle.value)
+    emits('add:battle', editModeTitle.value)
     emits('update:title', editModeTitle.value)
   }
   editMode.value = 'off'
 }
 
-const displayTitle = computed(() => {
-  return props.title? props.title : 'select a battle'
-})
 </script>

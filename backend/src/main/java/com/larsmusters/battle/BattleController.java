@@ -18,9 +18,17 @@ public class BattleController {
 
 
     @PostMapping
-    public Long addBattle(@RequestBody Battle battle) {
+    public Battle addBattle(@RequestBody Battle battle) {
         return battleService.addBattle(battle);
     }
+
+
+    @PutMapping(path="{battleId}")
+    public Battle updateBattle(
+            @RequestBody Battle battle,
+            @PathVariable("battleId"
+            )
+            Long battleId) {return battleService.updateBattle(battleId, battle);}
 
     @DeleteMapping(path="{battleId}")
     public void deleteBattle(@PathVariable("battleId") Long battleId) {
