@@ -3,7 +3,10 @@ package com.larsmusters.battle;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import com.larsmusters.character.Character;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity(name= "Battle")
@@ -36,21 +39,27 @@ public class Battle {
     @JsonManagedReference
     private List<Character> characters;
 
+    @Column(name = "create_dt")
+    @CreationTimestamp
+    private LocalDateTime createDt;
+
+    @Column(name = "update_dt")
+    @UpdateTimestamp
+    private LocalDateTime updateDt;
+
 
     public Battle() {
-    }
-
-    public Battle(Long id) {
-        this.id = id;
     }
 
     public Battle(String name) {
         this.name = name;
     }
 
-    public Battle(Long id, String name, List<Character> characters) {
+    public Battle(Long id, String name, LocalDateTime createDt, LocalDateTime updateDt, List<Character> characters) {
         this.id = id;
         this.name = name;
+        this.createDt = createDt;
+        this.updateDt = updateDt;
         this.characters = characters;
     }
 
@@ -76,6 +85,22 @@ public class Battle {
 
     public void setCharacters(List<Character> characters) {
         this.characters = characters;
+    }
+
+    public LocalDateTime getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(LocalDateTime createDt) {
+        this.createDt = createDt;
+    }
+
+    public LocalDateTime getUpdateDt() {
+        return updateDt;
+    }
+
+    public void setUpdateDt(LocalDateTime updateDt) {
+        this.updateDt = updateDt;
     }
 
     @Override

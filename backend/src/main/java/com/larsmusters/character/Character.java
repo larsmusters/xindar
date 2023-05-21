@@ -3,6 +3,10 @@ package com.larsmusters.character;
 import com.fasterxml.jackson.annotation.*;
 import com.larsmusters.battle.Battle;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity(name = "Character")
 @Table(name = "character")
@@ -48,21 +52,26 @@ public class Character {
     @JsonBackReference
     private Battle battle;
 
+    @Column(name = "create_dt")
+    @CreationTimestamp
+    private LocalDateTime createDt;
 
-    public Character(Long id) {
-        this.id = id;
-    }
+    @Column(name = "update_dt")
+    @UpdateTimestamp
+    private LocalDateTime updateDt;
 
     // must put a default constructor
     public Character() {
     }
 
-    public Character(Long id, String name, int initiative, boolean isUp, Battle battle) {
+    public Character(Long id, String name, int initiative, boolean isUp, Battle battle, LocalDateTime createDt, LocalDateTime updateDt) {
         this.id = id;
         this.name = name;
         this.initiative = initiative;
         this.isUp = isUp;
         this.battle = battle;
+        this.createDt = createDt;
+        this.updateDt = updateDt;
     }
 
     public Character(String name, int initiative, boolean isUp, Battle battle) {
@@ -111,6 +120,22 @@ public class Character {
 
     public void setBattle(Battle battle) {
         this.battle = battle;
+    }
+
+    public LocalDateTime getCreateDt() {
+        return createDt;
+    }
+
+    public void setCreateDt(LocalDateTime createDt) {
+        this.createDt = createDt;
+    }
+
+    public LocalDateTime getUpdateDt() {
+        return updateDt;
+    }
+
+    public void setUpdateDt(LocalDateTime updateDt) {
+        this.updateDt = updateDt;
     }
 
     @Override
