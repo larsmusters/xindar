@@ -24,9 +24,6 @@ const connectToWebSocket = async () => {
   store.stompClient = Stomp.over(socket)
   store.stompClient.debug = () => {}
   store.stompClient.connect({}, async function () {
-    store.stompClient?.subscribe('/topic/greetings', (greeting) => {
-      console.log(JSON.parse(greeting.body).content)
-    })
     store.stompClient?.subscribe('/topic/next', () => {
       store.goToNextTurn()
     })

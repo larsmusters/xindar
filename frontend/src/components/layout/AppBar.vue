@@ -1,8 +1,8 @@
 <template>
   <v-app-bar flat>
-    <v-container class="fill-height d-flex align-center">
+    <v-container class="fill-height d-flex align-center" style="max-width:1200px">
       <v-avatar
-        class="me-10 ms-4 v-card--hover"
+        class="me-8 ms-6 v-card--hover"
         size="32"
         rounded="0"
         image="head-icon.svg"
@@ -52,7 +52,12 @@ import { useDisplay } from 'vuetify'
 import { useRouter } from 'vue-router'
 const { xs } = useDisplay()
 
-const links = [{ label: 'Battles', routeName: 'Setup' }, { label: 'Join a battle', routeName: 'Battle' }]
+const links = [
+  { label: 'Battles', routeName: 'Setup' },
+  { label: 'Host a battle', routeName: 'Setup' },
+  { label: 'Join a battle', routeName: 'Battle' },
+  { label: 'Volaren map', routeName: 'Maps' },
+]
 
 const router = useRouter()
 
