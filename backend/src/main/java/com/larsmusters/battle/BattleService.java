@@ -14,7 +14,12 @@ public class BattleService {
 
     @Autowired BattleService(BattleRepository battleRepository) { this.battleRepository = battleRepository;}
 
-    public List<Battle> getBattle() { return battleRepository.findAll();}
+    public List<Battle> getBattles() { return battleRepository.findAll();}
+
+    public Battle getBattle(Long battleId) {
+        return battleRepository.findById(battleId)
+                .orElseThrow(() -> new IllegalStateException("Battle with " + battleId + "does not exist."));
+    }
 
     public Battle addBattle(Battle battle) {
         battleRepository.save(battle);

@@ -4,6 +4,7 @@ import { Battle, BattleWithCharacters, CreateBattle } from '@/battle/battle-type
 export interface BattleService {
   readonly get: {
     readonly all: () => Promise<Array<BattleWithCharacters>>;
+    readonly one: (battleID: number) => Promise<BattleWithCharacters>;
   };
 
   readonly create: {
@@ -11,7 +12,7 @@ export interface BattleService {
   };
 
   readonly update: {
-    readonly one: (data: Battle)  => Promise<Battle>;
+    readonly one: (data: BattleWithCharacters)  => Promise<Battle>;
   };
 
   readonly delete: {

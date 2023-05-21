@@ -3,11 +3,11 @@ import { Character } from '@/character/character-types.ts'
 import { Client } from 'webstomp-client'
 import { CharacterService } from '@/character/character-service.ts'
 import { BattleService } from '@/battle/battle-service.ts'
-import { Battle, BattleWithCharacters } from '@/battle/battle-types.ts'
+import { BattleWithCharacters } from '@/battle/battle-types.ts'
 
 export const useAppStore = defineStore('app', {
   state: () => ({
-    selectedBattle: null as Battle | null,
+    selectedBattle: null as BattleWithCharacters | null,
     characterService: null as CharacterService | null,
     battleService: null as BattleService | null,
     stompClient: null as Client | null,
@@ -19,16 +19,10 @@ export const useAppStore = defineStore('app', {
     socketConnected(): boolean {
       return this.stompClient?.connected || false
     },
-    upNextCharacter(): Character | null {
-      return this.battleData[1]
-    },
-    currentCharacter(): Character | null {
-      return this.battleData[0]
-    },
     sortedCharacters(): Character[] {
-      return this.data?.sort(
+      return this.selectedBattle?.characters.sort(
         (a, b) => (b.initiative || 0) - (a.initiative || 0)
-      )
+      ) || []
     },
   },
   actions: {

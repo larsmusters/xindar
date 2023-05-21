@@ -19,6 +19,7 @@
             persistent-placeholder
             hide-details
             :rules="[(v) => !isNaN(v) || '']"
+            @keyup.enter="submitNewCharacter"
           />
         </v-col>
         <v-col class="btn-grow">
@@ -57,22 +58,24 @@ const newCharacter = ref<CreateCharacter>({
 })
 
 const submitNewCharacter = async () => {
+  if (!newCharacter.value.name) {
+    return
+  }
   await store.characterService?.create
-    .one(newCharacter.value)
+    .one({ ...newCharacter.value, battleId: store.selectedBattle!.id })
     .then((response) => {
       let newRow = toRaw(response)
-      store.data?.push(structuredClone(newRow))
+      store.selectedBattle!.characters.push(structuredClone(newRow))
     })
     .catch((response) => {
       console.log(response)
     })
 }
-
 </script>
 
 <style scoped>
 .btn-grow {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 </style>

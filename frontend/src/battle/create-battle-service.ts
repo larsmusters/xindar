@@ -6,6 +6,7 @@ export function createBattleService(apiService: ApiService): BattleService {
   return {
     get: {
       all: () => apiService.get('/battle'),
+      one: (battleID) => apiService.get(`/battle/${battleID}`),
     },
     create: {
       one: (data) => apiService.post('/battle', data),

@@ -9,6 +9,11 @@ const router = createRouter({
       component: () => import('../views/Home.vue'),
     },
     {
+      path: '/joiner',
+      name: 'Joiner',
+      component: () => import('../views/BattleJoiner.vue'),
+    },
+    {
       path: '/battle',
       name: 'Battle',
       component: () => import('../views/Battle.vue'),

@@ -18,6 +18,7 @@ public class CharacterController {
 
     @PostMapping
     public Character registerNewCharacter(@RequestBody Character character) {
+        System.out.println(character.toString());
         return characterService.addNewCharacter(character);
     }
 

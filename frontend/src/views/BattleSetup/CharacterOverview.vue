@@ -40,15 +40,14 @@ import { useAppStore } from '@/store'
 const store = useAppStore()
 
 const sortedCharacters = computed(() => {
-  return store.data?.sort((a, b) => (b.initiative || 0) - (a.initiative || 0))
+  return store.selectedBattle?.characters.sort((a, b) => (b.initiative || 0) - (a.initiative || 0))
 })
 
 const deleteCharacter = async (id: number) => {
   await store.characterService?.delete
     .one(id)
-    .then((response) => {
-      console.log(response)
-      store.data = store.data!.filter((row) => row.id != id)
+    .then(() => {
+      store.selectedBattle!.characters = store.selectedBattle!.characters.filter((row) => row.id != id)
     })
     .catch((response) => console.log(response))
 }

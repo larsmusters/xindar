@@ -14,8 +14,10 @@ public class BattleController {
     @Autowired BattleController(BattleService battleService) { this.battleService = battleService;}
 
     @GetMapping
-    public List<Battle> getBattle() { return battleService.getBattle();}
+    public List<Battle> getBattles() { return battleService.getBattles();}
 
+    @GetMapping(path="{battleId}")
+    public Battle getBattle(@PathVariable("battleId") Long battleId) {return battleService.getBattle(battleId);}
 
     @PostMapping
     public Battle addBattle(@RequestBody Battle battle) {

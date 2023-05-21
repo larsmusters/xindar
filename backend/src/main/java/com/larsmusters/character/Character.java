@@ -44,10 +44,15 @@ public class Character {
     )
     private boolean isUp;
 
+    @Column(name="battle_id")
+    private Long battleId;
+
     @ManyToOne
     @JoinColumn(
             name="battle_id",
-            foreignKey = @ForeignKey(name="fk_character_battle")
+            foreignKey = @ForeignKey(name="fk_character_battle"),
+            insertable = false,
+            updatable = false
     )
     @JsonBackReference
     private Battle battle;
@@ -64,23 +69,22 @@ public class Character {
     public Character() {
     }
 
-    public Character(Long id, String name, int initiative, boolean isUp, Battle battle, LocalDateTime createDt, LocalDateTime updateDt) {
+    public Character(Long id, String name, int initiative, boolean isUp, Long battleId, Battle battle, LocalDateTime createDt, LocalDateTime updateDt) {
         this.id = id;
         this.name = name;
         this.initiative = initiative;
         this.isUp = isUp;
+        this.battleId = battleId;
         this.battle = battle;
         this.createDt = createDt;
         this.updateDt = updateDt;
     }
 
-    public Character(String name, int initiative, boolean isUp, Battle battle) {
+    public Character(String name, int initiative, Long battleId) {
         this.name = name;
         this.initiative = initiative;
-        this.isUp = isUp;
-        this.battle = battle;
+        this.battleId = battleId;
     }
-
 
     public Long getId() {
         return id;
@@ -114,6 +118,14 @@ public class Character {
         isUp = up;
     }
 
+    public Long getBattleId() {
+        return battleId;
+    }
+
+    public void setBattleId(Long battleId) {
+        this.battleId = battleId;
+    }
+
     public Battle getBattle() {
         return battle;
     }
@@ -145,6 +157,10 @@ public class Character {
                 ", name='" + name + '\'' +
                 ", initiative=" + initiative +
                 ", isUp=" + isUp +
+                ", battleId=" + battleId +
+                ", battle=" + battle +
+                ", createDt=" + createDt +
+                ", updateDt=" + updateDt +
                 '}';
     }
 }
