@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-3 px-3 d-flex justify-lg-space-between">
+  <div class="pa-3 px-3 d-flex justify-space-between">
     <div>
       <div
         v-if="editMode == 'off' && battles.length != 0"
@@ -33,7 +33,7 @@
       <div v-else-if="editMode != 'off'" class="d-flex align-center">
         <v-text-field
           v-model="editModeTitle"
-          class="pr-3 ml-3"
+          class="pr-2 ml-3"
           variant="outlined"
           style="min-width: 15em"
           hide-details
@@ -43,16 +43,17 @@
         />
         <v-btn
           variant="text"
-          class="rounded-lg"
+          :class="{'rounded-lg': true, 'pl-0': xs}"
           @click="handleSaveButton"
         >
-          Save
+          {{ !xs ? "Save" : null }}
           <v-icon icon="mdi-content-save" class="pl-2" />
         </v-btn>
         <v-btn
+          v-if="!xs"
           variant="text"
           class="rounded-lg ml-1"
-          @click="editMode = 'off'"
+          @click="handleCancelButton"
         >
           Cancel
           <v-icon icon="mdi-cancel" class="pl-2" />
@@ -60,46 +61,32 @@
       </div>
     </div>
 
-    <div class="d-flex align-center">
+    <div v-if="editMode == 'off'">
       <v-btn
-        v-if="!!title"
+        v-if="battles.length != 0"
+        icon
         variant="text"
-        class="d-flex flex-column"
       >
-        remove battle
-        <v-dialog
-          v-model="dialog"
-          activator="parent"
-          :fullscreen="xs"
-          width="auto"
-        >
+        <v-icon :icon="actionMenu ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
+        <v-menu v-model="actionMenu" activator="parent">
           <v-card>
-            <v-card-text class="d-flex flex-column align-center">
-              <p>You are about to remove "{{ title }}".</p>
-              <p>It cannot be restored.</p>
-              <p>
-                <u> Are you sure? </u>
-              </p>
-            </v-card-text>
-            <v-card-actions align-end>
-              <v-spacer />
-              <v-btn @click="dialog = false">
-                Cancel
-              </v-btn>
-              <v-btn @click="[emits('remove:battle'), (dialog = false)];">
-                Remove
-              </v-btn>
-            </v-card-actions>
+            <v-card-title> Actions </v-card-title>
+            <v-divider />
+            <v-card-item v-if="!!title" class="battle-card-item pa-3 px-5">
+              Remove this battle
+              <battle-select-remove-dialog
+                :title="title"
+                @confirm="emits('remove:battle')"
+              />
+            </v-card-item>
+            <v-card-item
+              class="battle-card-item pa-3 px-5"
+              @click="initNewBattle"
+            >
+              Create new battle
+            </v-card-item>
           </v-card>
-        </v-dialog>
-      </v-btn>
-      <v-divider
-        v-if="title"
-        vertical
-        class="mx-2"
-      />
-      <v-btn variant="text" @click="initNewBattle">
-        new battle
+        </v-menu>
       </v-btn>
     </div>
   </div>
@@ -110,10 +97,9 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 import BattleMenuSelector from '@/views/BattleSetup/BattleMenuSelector.vue'
 import { Battle } from '@/battle/battle-types.ts'
+import BattleSelectRemoveDialog from '@/views/BattleSetup/BattleSelectRemoveDialog.vue'
 
 const { xs } = useDisplay()
-
-const dialog = ref<boolean>()
 
 const props = defineProps<{
   title: string | null;
@@ -149,9 +135,24 @@ const handleSaveButton = () => {
   if (editMode.value == 'editing') {
     emits('update:title', editModeTitle.value)
   } else if (editMode.value == 'adding') {
-    console.log('called once')
     emits('add:battle', editModeTitle.value)
   }
   editMode.value = 'off'
 }
+
+const handleCancelButton = () => {
+  editMode.value = 'off'
+  editModeTitle.value = props.title || ''
+}
+
+const actionMenu = ref<boolean>(false)
 </script>
+
+<style scoped lang="scss">
+.battle-card-item {
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(128, 128, 128, 0.3);
+  }
+}
+</style>

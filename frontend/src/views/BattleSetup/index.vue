@@ -1,7 +1,10 @@
 <template>
   <v-container style="max-width: 1200px" class="pt-0 pb-0">
     <PageTitle title="Battle builder" />
-    <v-sheet min-height="70vh" rounded="lg">
+    <v-sheet
+      min-height="70vh"
+      rounded="lg"
+    >
       <BattleSelect
         :title="store.selectedBattle?.name || null"
         :battles="store.battles"
@@ -26,8 +29,11 @@ import CharacterAdder from '@/views/BattleSetup/CharacterAdder.vue'
 import CharacterOverview from '@/views/BattleSetup/CharacterOverview.vue'
 import { ref } from 'vue'
 import { useAppStore } from '@/store'
+import { useDisplay } from 'vuetify'
 
 const store = useAppStore()
+
+const { xs } = useDisplay()
 
 const getBattles = () => {
   store.battleService?.get.all().then((response) => {

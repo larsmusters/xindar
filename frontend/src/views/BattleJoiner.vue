@@ -2,30 +2,19 @@
   <v-container style="max-width:1200px" class="pt-0 pb-0">
     <page-title :title="title" />
     <v-sheet min-height="70vh" rounded="lg">
-      <v-list class="ml-4" style="max-width: 40em">
-        <v-list-item>
-          <v-row>
-            <v-col cols="2">
-              Name
-            </v-col>
-          </v-row>
-        </v-list-item>
-        <v-list-item v-for="row in store.battles" :key="row.id!">
-          <v-row align="center">
-            <v-col cols="2">
-              <b>
-                {{ row.name }}
-              </b>
-            </v-col>
-            <v-col cols="1">
-              <v-btn
-                variant="flat"
-                icon="mdi-chevron-right"
-                @click="joinBattle(row.id!)"
-              />
-            </v-col>
-          </v-row>
-          <v-divider />
+      <v-list class="pa-4" style="max-width: 40em">
+        <v-list-item
+          v-for="row in store.battles"
+          :key="row.id!"
+          class="rounded-lg"
+          @click="joinBattle(row.id)"
+        >
+          <div class="d-flex">
+            <b class="pr-5">
+              {{ row.name }}
+            </b>
+            <v-icon icon="mdi-chevron-right" />
+          </div>
         </v-list-item>
       </v-list>
     </v-sheet>

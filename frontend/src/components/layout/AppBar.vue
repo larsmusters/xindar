@@ -37,10 +37,9 @@
                 :key="link.routeName"
                 :to="{ name: link.routeName, query: link.query }"
                 block
-                variant="text"
+                variant="plain"
               >
                 {{ link.label }}
-                {{ link.query }}
               </v-btn>
             </v-list-item>
           </v-list>

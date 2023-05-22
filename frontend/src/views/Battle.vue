@@ -56,7 +56,6 @@
       </v-col>
     </v-row>
   </v-container>
-  {{ battleData }}
 </template>
 
 <script setup lang="ts">
@@ -96,6 +95,7 @@ onMounted(() => {
       if (noStarter) {
         sortedCharacters[0].up = true
       }
+      // todo: Add put to DB on changing the up! Add endpoint in BE as well.
       battleData.value = { ...response, characters: sortedCharacters }
     })
 })
@@ -103,10 +103,8 @@ onMounted(() => {
 const battleData = ref<BattleWithCharacters>()
 
 const moveWhoIsUp = () => {
-  // todo:
-  console.log('check')
+  // todo: Add put to DB on changing the up! Add endpoint in BE as well.
   const currentIndex = battleData.value?.characters.indexOf(currentCharacter.value!)
-  console.log(currentIndex )
   if (currentIndex != null && battleData.value ) {
     battleData.value!.characters[currentIndex].up = false
     if (currentIndex == battleData.value?.characters.length - 1) {
@@ -127,13 +125,14 @@ const upNextCharacter = computed(() => {
     return null
   }
   const currentIndex = battleData.value?.characters.indexOf(currentCharacter.value!)
-  if (currentIndex && battleData.value) {
+  if (currentIndex != null && battleData.value) {
     if (currentIndex == battleData.value?.characters.length - 1) {
-      return battleData.value?.characters[0]
+      return battleData.value!.characters[0]
     } else {
       return battleData.value!.characters[currentIndex+1]
     }
   }
+  return null
 })
 
 const currentCharacter = computed(() => {
