@@ -85,32 +85,40 @@ connectToWebSocket()
 const route = useRoute()
 
 onMounted(() => {
-  store.battleService?.get
-    .one(route.query.battleId as unknown as number)
-    .then((response) => {
-      const sortedCharacters = response.characters.sort((a,b) => {
-        return  (b.initiative || 0) - (a.initiative || 0)
-      }) || []
-      const noStarter = !sortedCharacters.find((c) => c.up)
-      if (noStarter) {
-        sortedCharacters[0].up = true
-      }
-      // todo: Add put to DB on changing the up! Add endpoint in BE as well.
-      battleData.value = { ...response, characters: sortedCharacters }
+  if (route.query.type == 'host') {
+    store.battleService?.get
+      .one(route.query.battleId as unknown as number)
+      .then((response) => {
+        const sortedCharacters = response.characters.sort((a,b) => {
+          return  (b.initiative || 0) - (a.initiative || 0)
+        }) || []
+        const noStarter = !sortedCharacters.find((c) => c.up)
+        if (noStarter) {
+          sortedCharacters[0].up = true
+          store.characterService?.update.one(sortedCharacters[0])
+        }
+        // todo: Add put to DB on changing the up! Add endpoint in BE as well.
+        battleData.value = { ...response, characters: sortedCharacters }
     })
+  }
 })
 
 const battleData = ref<BattleWithCharacters>()
 
 const moveWhoIsUp = () => {
   // todo: Add put to DB on changing the up! Add endpoint in BE as well.
+  // Not every client should do this!! This is wrong. Maybe make a drawing.
   const currentIndex = battleData.value?.characters.indexOf(currentCharacter.value!)
   if (currentIndex != null && battleData.value ) {
     battleData.value!.characters[currentIndex].up = false
+    store.characterService?.update.one(battleData.value!.characters[currentIndex])
     if (currentIndex == battleData.value?.characters.length - 1) {
       battleData.value!.characters[0].up = true
+      store.characterService?.update.one(battleData.value!.characters[0])
     } else {
       battleData.value!.characters[currentIndex+1].up = true
+      store.characterService?.update.one(battleData.value!.characters[currentIndex+1])
+
     }
   }
 }

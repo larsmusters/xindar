@@ -1,5 +1,7 @@
 package com.larsmusters.character;
 
+import com.larsmusters.battle.Battle;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,18 @@ public class CharacterService {
             throw new IllegalStateException("Character with " + characterId + "does not exist");
         }
         characterRepository.deleteById(characterId);
+    }
+
+    @Transactional
+    public Character updateCharacter(Long characterId, Character character) {
+        Character characterInDB = characterRepository.findById(characterId)
+                .orElseThrow(() -> new IllegalStateException("Character with " + characterId + "does not exist."));
+
+        characterInDB.setName(character.getName());
+        characterInDB.setBattleId(character.getBattleId());
+        characterInDB.setUp(character.isUp());
+        characterInDB.setInitiative(character.getInitiative());
+
+        return characterInDB;
     }
 }

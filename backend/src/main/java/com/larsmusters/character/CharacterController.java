@@ -22,6 +22,15 @@ public class CharacterController {
         return characterService.addNewCharacter(character);
     }
 
+
+    @PutMapping(path="{characterId}")
+    public Character updateCharacter(
+            @RequestBody Character character,
+            @PathVariable("characterId"
+            )
+            Long characterId) {return characterService.updateCharacter(characterId, character);}
+
+
     @DeleteMapping(path="{characterId}")
     public void deleteCharacter(@PathVariable("characterId") Long characterId) {
         characterService.deleteCharacter(characterId);

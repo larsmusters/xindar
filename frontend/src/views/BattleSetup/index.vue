@@ -29,11 +29,8 @@ import CharacterAdder from '@/views/BattleSetup/CharacterAdder.vue'
 import CharacterOverview from '@/views/BattleSetup/CharacterOverview.vue'
 import { ref } from 'vue'
 import { useAppStore } from '@/store'
-import { useDisplay } from 'vuetify'
 
 const store = useAppStore()
-
-const { xs } = useDisplay()
 
 const getBattles = () => {
   store.battleService?.get.all().then((response) => {

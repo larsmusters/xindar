@@ -18,7 +18,9 @@
             />
           </v-menu>
         </v-btn>
-        <h1 :class="!!title ? '' : 'text-grey'" class="pr-2 ml-3">
+        <h1
+          :class="{'pr-2 ml-3': true, 'text-grey': !title}"
+        >
           {{ title || "Select a battle" }}
         </h1>
         <v-btn
@@ -43,7 +45,7 @@
         />
         <v-btn
           variant="text"
-          :class="{'rounded-lg': true, 'pl-0': xs}"
+          :class="{ 'rounded-lg': true, 'pl-0': xs }"
           @click="handleSaveButton"
         >
           {{ !xs ? "Save" : null }}
@@ -61,7 +63,7 @@
       </div>
     </div>
 
-    <div v-if="editMode == 'off'">
+    <div v-if="editMode == 'off'" class="d-flex align-center">
       <v-btn
         v-if="battles.length != 0"
         icon
@@ -155,4 +157,5 @@ const actionMenu = ref<boolean>(false)
     background-color: rgba(128, 128, 128, 0.3);
   }
 }
+
 </style>

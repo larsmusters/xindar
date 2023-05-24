@@ -15,8 +15,8 @@ export interface CreateCharacter {
 
 export interface UpdateCharacter {
   id: number;
-  name: string;
-  initiative: number;
-  battleId: number;
-  up: boolean;
+  name: string | null;
+  initiative: number | null;
+  battleId: number | null;
+  up: boolean | null;
 }
