@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar v-model="showBar" flat>
     <v-container
-      class="fill-height d-flex align-center"
+      class="fill-height d-flex align-center pa-0 pl-4"
       style="max-width: 1200px"
     >
       <v-avatar
@@ -45,13 +45,28 @@
           </v-list>
         </v-menu>
       </v-btn>
+      <v-btn
+        variant="plain"
+        icon="mdi-chevron-up"
+        @click="showBar = !showBar"
+      />
     </v-container>
   </v-app-bar>
+  <v-btn
+    block
+    variant="plain"
+    class="show-bar-button"
+    :ripple="false"
+    @click="showBar = !showBar"
+  >
+    <v-icon icon="mdi-chevron-down" />
+  </v-btn>
 </template>
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 const { xs } = useDisplay()
 
 interface Links {
@@ -72,4 +87,24 @@ const router = useRouter()
 const toHome = () => {
   router.push({ name: 'Home' })
 }
+
+const showBar = ref<boolean>(true)
 </script>
+
+<style scoped lang="scss">
+.show-bar-button {
+    position: absolute;
+    z-index: 1;
+    margin-bottom: -3em;
+    opacity: 0;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 500px) {
+  .show-bar-button{
+    opacity: 1 !important;
+  }
+}
+</style>

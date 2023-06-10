@@ -16,17 +16,17 @@ public class CharacterService {
     public CharacterService(CharacterRepository characterRepository) { this.characterRepository = characterRepository;}
 
     public Character addNewCharacter(Character character) {
-//        Optional<Character> characterOptional = characterRepository
-//                .findCharacterByName(character.getName());
-//        if (characterOptional.isPresent()) {
-//            throw new IllegalStateException("Character name taken");
-//        }
         characterRepository.save(character);
         return character;
     }
 
-    public List<Character> getCharacter() {
+    public List<Character> getCharacters() {
         return characterRepository.findAll();
+    }
+
+    public Character getCharacter(Long characterId) {
+        return characterRepository.findById(characterId)
+                .orElseThrow(() -> new IllegalStateException("Character with " + characterId + " does not exist."));
     }
 
     public void deleteCharacter(Long characterId) {
@@ -40,7 +40,7 @@ public class CharacterService {
     @Transactional
     public Character updateCharacter(Long characterId, Character character) {
         Character characterInDB = characterRepository.findById(characterId)
-                .orElseThrow(() -> new IllegalStateException("Character with " + characterId + "does not exist."));
+                .orElseThrow(() -> new IllegalStateException("Character with " + characterId + " does not exist."));
 
         characterInDB.setName(character.getName());
         characterInDB.setBattleId(character.getBattleId());
